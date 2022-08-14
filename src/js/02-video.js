@@ -10,15 +10,17 @@ onListenerPlay();
 
 // 1. Функция проверки реакции пользователя и установку точки в сохраненную позицию или в начало
 function onSetTimePlayer() {
+  let result;
   let setTime = 0;
-  let result = confirm(
-    'If you want to start watching again, please click OK. Otherwise, watching will continue from where you left off last time.'
-  );
+  if (localStorage.getItem(STORAGE_KEY)) {
+    result = confirm(
+      'If you want to start watching again, please click OK. Otherwise, watching will continue from where you left off last time.'
+    );
+  }
 
   if (!result) {
     setTime = Number(localStorage.getItem(STORAGE_KEY));
   }
-
   //   console.log('setTime :>> ', setTime);
   player.setCurrentTime(setTime);
 }
