@@ -1,2 +1,0 @@
-!function(){var e="videoplayer-current-time",t=new Vimeo.Player("vimeo-player"),o=0;!function(){var o=0;confirm("If you want to start watching again, please click OK. Otherwise, watching will continue from where you left off last time.")||(o=Number(localStorage.getItem(e)));t.setCurrentTime(o)}(),t.on("timeupdate",(function(){var r,n;t.getCurrentTime().then((function(e){return o=e})).catch((function(e){console.log("error :>> ",e)})),r=o,n=localStorage.setItem(e,Math.floor(r)),_.throttle(n,1e3)}))}();
-//# sourceMappingURL=02-video.e5120db6.js.map
