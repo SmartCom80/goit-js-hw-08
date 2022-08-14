@@ -1,0 +1,2 @@
+const e=new Vimeo.Player("vimeo-player");let t=0;!function(){let t=0;confirm("If you want to start watching again, please click OK. Otherwise, watching will continue from where you left off last time.")||(t=Number(localStorage.getItem("videoplayer-current-time")));e.setCurrentTime(t)}(),e.on("timeupdate",(function(){e.getCurrentTime().then((function(e){return t=e})).catch((function(e){console.log("error :>> ",e)})),function(e){const t=localStorage.setItem("videoplayer-current-time",Math.floor(e));_.throttle(t,1e3)}(t)}));
+//# sourceMappingURL=02-video.2abd0cf8.js.map
