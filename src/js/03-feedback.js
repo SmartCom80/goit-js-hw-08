@@ -1,10 +1,8 @@
-import throttle from 'lodash.throttle';
-
 const form = document.querySelector('.feedback-form');
 const STORAGE_KEY = 'feedback-form-state';
 const formData = new FormData();
 
-form.addEventListener('input', throttle(onFeedbackInput, 500));
+form.addEventListener('input', onFeedbackInput);
 form.addEventListener('submit', onFeedbackSubmit);
 
 // 1. При загрузке/перезагрузке страницы, считываем наличие записи в localStorage по ключу STORAGE_KEY
@@ -34,7 +32,7 @@ function onCheckData(subject) {
   }
 }
 
-// 4. Вызываем функцию записи в поля формы
+// 4. Вызываем функцию записи в поля формы из ключей FormData
 function onReWriteFormField() {
   //   console.log('form :>> ', formData.get('email'));
   form.email.value = formData.get('email');
@@ -50,24 +48,25 @@ function onWriteStorage() {
 function onFeedbackInput(event) {
   const evt = event.target;
 
-  //   console.log('evt.name :>> ', evt.name);
-  //   console.log('evt.value :>> ', evt.value);
-
   formData.set(evt.name, evt.value);
-
-  onWriteStorage();
+  const temp = onWriteStorage();
+  _.throttle(temp, 500);
   return formData;
 }
 
-// 7. Колбек-функция для отправки данных формы
+// 7. Колбек-функция для отправки данных формы и очистка полей формы, ключей localStorage и FormData
 function onFeedbackSubmit(event) {
   event.preventDefault();
-  if (formData.get('email') === 'null' || formData.get('password') === 'null') {
+
+  if (formData.get('email') === null || formData.get('message') === null) {
     window.alert('Please fill in all the fields!');
     return;
   }
+
   console.log('email: ', formData.get('email'));
   console.log('message: ', formData.get('message'));
+  formData.delete('email');
+  formData.delete('message');
   event.target.reset();
   localStorage.removeItem(STORAGE_KEY);
 }
