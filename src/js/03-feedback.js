@@ -1,8 +1,9 @@
+import throttle from 'lodash.throttle';
 const form = document.querySelector('.feedback-form');
 const STORAGE_KEY = 'feedback-form-state';
 const formData = new FormData();
 
-form.addEventListener('input', onFeedbackInput);
+form.addEventListener('input', throttle(onFeedbackInput, 500));
 form.addEventListener('submit', onFeedbackSubmit);
 
 // 1. При загрузке/перезагрузке страницы, считываем наличие записи в localStorage по ключу STORAGE_KEY
@@ -34,9 +35,19 @@ function onCheckData(subject) {
 
 // 4. Вызываем функцию записи в поля формы из ключей FormData
 function onReWriteFormField() {
-  //   console.log('form :>> ', formData.get('email'));
-  form.email.value = formData.get('email');
-  form.message.value = formData.get('message');
+  if (formData.get('email') === 'undefined') {
+    //  console.log('formData.email :>> ', formData.get('email'));
+    form.email.value = '';
+  } else {
+    form.email.value = formData.get('email');
+  }
+
+  if (formData.get('message') === 'undefined') {
+    //  console.log('formData.message :>> ', formData.get('message'));
+    form.message.value = '';
+  } else {
+    form.message.value = formData.get('message');
+  }
 }
 
 // 5. Функция записи данных формы в LocalStorage
@@ -47,10 +58,11 @@ function onWriteStorage() {
 // 6. Колбек-функция для получения данных из формы
 function onFeedbackInput(event) {
   const evt = event.target;
-
+  //   console.log('evt.name :>> ', evt.name);
+  //   console.log('evt.value :>> ', evt.value);
   formData.set(evt.name, evt.value);
-  const temp = onWriteStorage();
-  _.throttle(temp, 500);
+  onWriteStorage();
+
   return formData;
 }
 

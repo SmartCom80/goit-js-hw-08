@@ -1,3 +1,4 @@
+import throttle from 'lodash.throttle';
 const STORAGE_KEY = 'videoplayer-current-time';
 const player = new Vimeo.Player('vimeo-player');
 let currentTime = 0;
@@ -53,5 +54,5 @@ function onGetCurrentTime() {
 function onWriteStorage(value) {
   //   console.log('currentValue :>> ', value);
   const item = localStorage.setItem(STORAGE_KEY, Math.floor(value));
-  _.throttle(item, 1000);
+  throttle(item, 1000);
 }
